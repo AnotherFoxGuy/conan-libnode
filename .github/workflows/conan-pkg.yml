@@ -46,10 +46,14 @@ jobs:
           choco install python3 -y
           refreshenv
 
+      - name: Install Conan
+        run: |
+          pip install conan
+          conan profile detect --force
+
       - name: Setup conan on ubuntu
         if: startsWith(matrix.config.os, 'ubuntu')
         run: |
-          conan profile detect --force
           echo "tools.system.package_manager:mode = install" > ~/.conan2/global.conf
           echo "tools.system.package_manager:sudo = True" >> ~/.conan2/global.conf
 
