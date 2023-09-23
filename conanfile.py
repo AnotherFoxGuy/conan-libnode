@@ -115,7 +115,7 @@ class libnodeConan(ConanFile):
             msbuild.build("node.sln", targets=["libnode"])
         else:
             autotools = Autotools(self)
-            autotools.make()
+            autotools.make(args=["-C out", "BUILDTYPE=%s" % self.settings.build_type], target="libnode")
 
     def package(self):
         if self.settings.os == "Windows":
@@ -169,15 +169,15 @@ class libnodeConan(ConanFile):
             )
             copy(
                 self,
-                "libnode.so",
-                os.path.join(self.source_folder, "out"),
+                "libnode.so.*",
+                os.path.join(self.source_folder, "out", str(self.settings.build_type)),
                 os.path.join(self.package_folder, "lib"),
                 keep_path=False
             )
             copy(
                 self,
-                "v8_libplatform.so",
-                os.path.join(self.source_folder, "out", "lib"),
+                "v8_libplatform.so*",
+                os.path.join(self.source_folder, "out", str(self.settings.build_type), "lib"),
                 os.path.join(self.package_folder, "lib"),
                 keep_path=False
             )
