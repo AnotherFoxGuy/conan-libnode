@@ -9,7 +9,7 @@ jobs:
   run-conan:
     runs-on: ${{ matrix.config.os }}
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         config:
           - name: Ubuntu Debug
@@ -53,6 +53,7 @@ jobs:
           CONAN_LOGIN_USERNAME: overte
           CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
         run: |
+          python --version
           conan remote add overte https://git.anotherfoxguy.com/api/packages/overte/conan
           conan create . -pr="./.conan-profiles/${{ matrix.config.conan-profile }}" -b=missing --version ${{ matrix.config.pkg-version }} --user overte --channel stable
           conan upload libnode/${{ matrix.config.pkg-version }}@overte/stable -r overte -c
