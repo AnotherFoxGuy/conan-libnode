@@ -164,8 +164,24 @@ class libnodeConan(ConanFile):
             )
         else:
             self.run(
-                "export HEADERS_ONLY=1 && python ./tools/install.py install %s\\ \\"
+                "export HEADERS_ONLY=1 && python ./tools/install.py install %s/ /"
                 % self.package_folder
+            )
+            copy(
+                self,
+                "*.h",
+                os.path.join(
+                    self.source_folder, "deps", "v8", "include", "libplatform"
+                ),
+                os.path.join(self.package_folder, "include", "libplatform"),
+                keep_path=False,
+            )
+            copy(
+                self,
+                "*.h",
+                os.path.join(self.source_folder, "deps", "v8", "include", "cppgc"),
+                os.path.join(self.package_folder, "include", "cppgc"),
+                keep_path=False,
             )
             copy(
                 self,
@@ -176,8 +192,8 @@ class libnodeConan(ConanFile):
             )
             copy(
                 self,
-                "v8_libplatform.so*",
-                os.path.join(self.source_folder, "out", str(self.settings.build_type), "lib"),
+                "*v8_libplatform.a",
+                os.path.join(self.source_folder, "out", str(self.settings.build_type), "obj.target", "tools", "v8_gypfiles"),
                 os.path.join(self.package_folder, "lib"),
                 keep_path=False
             )
