@@ -34,16 +34,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install deps (windows)
-        if: startsWith(matrix.config.os, 'windows')
+      - name: Install Conan
         run: |
-          choco install python3 conan -y         
+          pip install conan
+          conan profile detect --force
 
       - name: Setup conan on ubuntu
         if: startsWith(matrix.config.os, 'ubuntu')
         run: |
-          pip install conan
-          conan profile detect --force
           echo "tools.system.package_manager:mode = install" > ~/.conan2/global.conf
           echo "tools.system.package_manager:sudo = True" >> ~/.conan2/global.conf
 
