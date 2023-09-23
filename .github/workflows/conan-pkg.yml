@@ -52,7 +52,7 @@ jobs:
 
       - name: Run
         env:
-          CONAN_LOGIN_USERNAME: ${{ secrets.CONAN_LOGIN_USERNAME }}
+          CONAN_LOGIN_USERNAME: overte
           CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
         run: |
           conan remote add overte https://git.anotherfoxguy.com/api/packages/overte/conan
