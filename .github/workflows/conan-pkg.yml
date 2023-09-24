@@ -25,10 +25,10 @@ jobs:
           #   os: windows-2019
           #   conan-profile: vs-2019-debug
           #   pkg-version: 18.17.1
-          # - name: Windows 2019 Release
-          #   os: windows-2019
-          #   conan-profile: vs-2019-release
-          #   pkg-version: 18.17.1
+          - name: Windows 2019 Release
+            os: windows-2019
+            conan-profile: vs-2019-release
+            pkg-version: 18.17.1
 
     name: ${{ matrix.config.name }}
     steps:
@@ -44,9 +44,6 @@ jobs:
         run: |
           echo "tools.system.package_manager:mode = install" > ~/.conan2/global.conf
           echo "tools.system.package_manager:sudo = True" >> ~/.conan2/global.conf
-
-      - name: Enable Developer Command Prompt
-        uses: ilammy/msvc-dev-cmd@v1.12.1
 
       - name: Run
         env:
