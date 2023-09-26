@@ -193,4 +193,7 @@ class libnodeConan(ConanFile):
 
     def package_info(self):
         self.cpp_info.includedirs = ["include", "include/node"]
-        self.cpp_info.libs = collect_libs(self)
+        if self.settings.os == "Windows":
+            self.cpp_info.libs = collect_libs(self)
+        else:
+            self.cpp_info.libs = ["libnode.so.108"]
