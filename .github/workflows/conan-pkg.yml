@@ -6,8 +6,29 @@ on:
 name: conan
 
 jobs:
+  push-pkg:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Conan
+        run: |
+          pip install conan
+          conan profile detect --force
+
+      - name: Run
+        env:
+          CONAN_LOGIN_USERNAME: overte
+          CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
+        run: |
+          conan remote add overte https://git.anotherfoxguy.com/api/packages/overte/conan
+          conan export . --version 18.17.1 --user overte --channel stable
+          conan upload libnode/18.17.1@overte/stable -r overte -c
+
+
   run-conan:
     runs-on: ${{ matrix.config.os }}
+    needs: push-pkg
     strategy:
       fail-fast: true
       matrix:
@@ -50,7 +71,6 @@ jobs:
           CONAN_LOGIN_USERNAME: overte
           CONAN_PASSWORD: ${{ secrets.CONAN_PASSWORD }}
         run: |
-          python --version
           conan remote add overte https://git.anotherfoxguy.com/api/packages/overte/conan
-          conan create . -pr="./.conan-profiles/${{ matrix.config.conan-profile }}" -b=missing --version ${{ matrix.config.pkg-version }} --user overte --channel stable
-          conan upload libnode/${{ matrix.config.pkg-version }}@overte/stable -r overte -c
+          conan install --requires libnode/18.17.1@overte/stable -pr="./.conan-profiles/${{ matrix.config.conan-profile }}" -b missing
+          conan upload libnode/18.17.1@overte/stable -r overte -c
