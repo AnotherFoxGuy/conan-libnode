@@ -1,6 +1,7 @@
 import os
 from conan import ConanFile
 from conan.tools.files import get, copy, collect_libs, rename
+from conan.tools.build import check_min_cppstd
 from conan.tools.gnu import Autotools, AutotoolsToolchain, PkgConfigDeps
 from conan.tools.env import Environment, VirtualBuildEnv
 from conan.tools.microsoft import (
@@ -35,6 +36,10 @@ class libnodeConan(ConanFile):
             f"--shared-{libname}-libpath={libpath}",
         ]
 
+    def validate(self):
+        if self.settings.compiler.cppstd:
+            check_min_cppstd(self, 17)
+
     def build_requirements(self):
         self.tool_requires("nasm/2.15.05")
 
@@ -43,7 +48,7 @@ class libnodeConan(ConanFile):
         self.requires("llhttp/[>6.0 <7.0]")
         # self.requires("libnghttp2/[>1.50 <1.60]")
         # self.requires("libuv/[>1.40 <1.50]")
-        self.requires("openssl/1.1.1w")
+        self.requires("openssl/3.2.1")
         self.requires("zlib/[>1.0 <1.4]")
 
     def source(self):
